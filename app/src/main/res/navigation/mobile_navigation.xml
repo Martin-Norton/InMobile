@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@+id/nav_inicio">
+
+    <fragment
+        android:id="@+id/nav_inicio"
+        android:name="com.tec.inmobile.ui.inicio.InicioFragment"
+        android:label="@string/inicio"
+        tools:layout="@layout/fragment_inicio2" />
+
+    <fragment
+        android:id="@+id/nav_perfil"
+        android:name="com.tec.inmobile.ui.perfil.PerfilFragment"
+        android:label="@string/perfil"
+        tools:layout="@layout/fragment_perfil" />
+
+    <fragment
+        android:id="@+id/nav_inmuebles"
+        android:name="com.tec.inmobile.ui.inmuebles.InmueblesFragment"
+        android:label="@string/inmuebles"
+        tools:layout="@layout/fragment_inmuebles" />
+    <fragment
+        android:id="@+id/nav_inquilinos"
+        android:name="com.tec.inmobile.ui.inquilinos.InquilinosFragment"
+        android:label="@string/inquilinos"
+        tools:layout="@layout/fragment_inquilinos" />
+    <fragment
+        android:id="@+id/nav_contratos"
+        android:name="com.tec.inmobile.ui.contratos.ContratosFragment"
+        android:label="@string/contratos"
+        tools:layout="@layout/fragment_contratos" />
+    <fragment
+        android:id="@+id/nav_logout"
+        android:name="com.tec.inmobile.ui.logout.LogoutFragment"
+        android:label="@string/logout"
+        tools:layout="@layout/activity_logout" />
+    <activity
+        android:id="@+id/loginActivity"
+        android:name="com.tec.inmobile.ui.login.LoginActivity"
+        android:label="activity_login"
+        tools:layout="@layout/activity_login" />
+</navigation>
