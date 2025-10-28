@@ -22,7 +22,7 @@ public class InicioFragment extends Fragment {
     private OnMapReadyCallback callback = new OnMapReadyCallback() {
         @Override
         public void onMapReady(GoogleMap googleMap) {
-            LatLng ulp = new LatLng(-34, 151);
+            LatLng ulp = new LatLng(-33.150720, -66.306864);
             googleMap.addMarker(new MarkerOptions().position(ulp).title("Indicador en InMobile"));
             googleMap.moveCamera(CameraUpdateFactory.newLatLng(ulp));
         }

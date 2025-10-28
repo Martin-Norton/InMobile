@@ -75,7 +75,7 @@ public class PerfilViewModel extends AndroidViewModel {
     public void obtenerPerfil(){
         String token= ApiClient.leerToken(getApplication());
         ApiClient.InmoService api = ApiClient.getInmoService();
-        Call<Propietario> call = api.getPropietario("Bearer" + token);
+        Call<Propietario> call = api.getPropietario("Bearer " + token);
         call.enqueue(new Callback<Propietario>() {
             @Override
             public void onResponse(Call<Propietario> call, Response<Propietario> response) {
@@ -83,14 +83,14 @@ public class PerfilViewModel extends AndroidViewModel {
                     propietario.setValue(response.body());
                 }else{
                     Log.d("PerfilVM", "error en la respuesta: "+ response.code());
-                    Toast.makeText(getApplication(), "Error en la respuesta: " + response.code(), Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplication(), "Error en la respuesta: on response " + response.code(), Toast.LENGTH_LONG).show();
                 }
             }
 
             @Override
             public void onFailure(Call<Propietario> call, Throwable t) {
                 Log.d("PerfilVM", "error en la respuesta: " + t.getMessage());
-                Toast.makeText(getApplication(), "Error en la respuesta: " + t.getMessage(), Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplication(), "Error en la respuesta: on failure" + t.getMessage(), Toast.LENGTH_LONG).show();
 
             }
         });
