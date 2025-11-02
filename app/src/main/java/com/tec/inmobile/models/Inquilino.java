@@ -1,6 +1,8 @@
 package com.tec.inmobile.models;
 
-public class Inquilino {
+import java.io.Serializable;
+
+public class Inquilino implements Serializable {
     private int idInquilino;
     private String nombre;
     private String apellido;

@@ -53,7 +53,7 @@ public class PerfilViewModel extends AndroidViewModel {
             propietarioNew.setEmail(email);
             String token = ApiClient.leerToken(getApplication());
             ApiClient.InmoService api = ApiClient.getInmoService();
-            Call<Propietario> call = api.actualizarPropietario("Bearer" + token, propietarioNew);
+            Call<Propietario> call = api.actualizarPropietario("Bearer " + token, propietarioNew);
             call.enqueue(new Callback<Propietario>() {
                 @Override
                 public void onResponse(Call<Propietario> call, Response<Propietario> response) {

@@ -1,5 +1,7 @@
 package com.tec.inmobile.ui.contratos;
 
+import androidx.lifecycle.DefaultLifecycleObserver;
+import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -8,19 +10,22 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
+import androidx.navigation.fragment.NavHostFragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.bumptech.glide.Glide;
 import com.tec.inmobile.R;
 import com.tec.inmobile.databinding.FragmentDetalleContratoBinding;
-import com.tec.inmobile.databinding.FragmentDetalleInmuebleBinding;
 import com.tec.inmobile.models.Contrato;
-import com.tec.inmobile.models.Inmueble;
-import com.tec.inmobile.request.ApiClient;
-import com.tec.inmobile.ui.inmuebles.DetalleInmuebleViewModel;
+import com.tec.inmobile.ui.inquilinos.InquilinosFragment;
+
+import java.text.SimpleDateFormat;
+import java.util.Locale;
 
 public class DetalleContratoFragment extends Fragment {
     private FragmentDetalleContratoBinding binding;
@@ -38,27 +43,42 @@ public class DetalleContratoFragment extends Fragment {
         mv.getMContrato().observe(getViewLifecycleOwner(), new Observer<Contrato>() {
             @Override
             public void onChanged(Contrato contrato) {
+                SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
                 binding.etCodigo.setText(String.valueOf(contrato.getIdContrato()));
-                binding.etFechaInicio.setText(
-                        contrato.getFechaInicio() != null
-                                ? contrato.getFechaInicio().toString()
-                                : "Sin fecha");
-                binding.etFechaFin.setText(contrato.getFechaFinalizacion() != null
-                        ? contrato.getFechaFinalizacion().toString()
-                        : "Sin fecha");
+                binding.etFechaInicio.setText((contrato.getFechaInicio() != null ? dateFormat.format(contrato.getFechaInicio()) : "-"));
+                binding.etFechaFin.setText((contrato.getFechaFinalizacion() != null ? dateFormat.format(contrato.getFechaFinalizacion()) : "-"));
                 binding.etMontoAlquiler.setText(String.valueOf(contrato.getMontoAlquiler()));
                 binding.etInquilino.setText(contrato.getInquilino().getNombre() + ", " + contrato.getInquilino().getApellido());
                 binding.etInmueble.setText(contrato.getInmueble().getDireccion());
             }
         });
 
-        binding.btPagos.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
+        binding.btPagos.setOnClickListener(v -> {
+            Contrato contrato = mv.getMContrato().getValue();
+            if (contrato != null) {
+                mv.irApagos(Navigation.findNavController(v), contrato);
+            } else {
+                Log.e("DetalleContratoFragment", "Contrato es null, no se puede ir a pagos");
             }
         });
-
+        binding.btInquilinos.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mv.irAinquilinos();
+            }
+        });
+        mv.getIrAInquilino().observe(getViewLifecycleOwner(), bundle -> {
+            getViewLifecycleOwner().getLifecycle().addObserver(new DefaultLifecycleObserver() {
+                @Override
+                public void onResume(@NonNull LifecycleOwner owner) {
+                    if (bundle == null) return;
+                    NavController navController = NavHostFragment.findNavController(DetalleContratoFragment.this);
+                    navController.navigate(R.id.nav_inquilinos, bundle);
+                    mv.limpiarNavegacion();
+                    getViewLifecycleOwner().getLifecycle().removeObserver(this);
+                }
+            });
+        });
         mv.recuperarContrato(getArguments());
         return view;
     }

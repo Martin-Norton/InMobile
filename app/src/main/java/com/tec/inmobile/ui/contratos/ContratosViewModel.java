@@ -50,6 +50,8 @@ public class ContratosViewModel extends AndroidViewModel {
             @Override
             public void onResponse(Call<List<Contrato>> call, Response<List<Contrato>> response) {
                 if (response.isSuccessful()){
+                    listaContratos.clear();
+                    inmueblesConContrato.clear();
                     listaContratos.addAll(response.body());
                     for (Contrato c: listaContratos) {
                        inmueblesConContrato.add(c.getInmueble());

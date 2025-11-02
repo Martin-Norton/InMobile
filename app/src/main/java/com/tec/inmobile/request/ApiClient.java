@@ -7,6 +7,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.tec.inmobile.models.Contrato;
 import com.tec.inmobile.models.Inmueble;
+import com.tec.inmobile.models.Pagos;
 import com.tec.inmobile.models.Propietario;
 
 import java.util.List;
@@ -72,6 +73,11 @@ public class ApiClient {
         Call<Contrato> getContratoPorInmueble(
                 @Header("Authorization") String token,
                 @Path("id") int idInmueble
+        );
+        @GET("/api/pagos/contrato/{id}")
+        Call<List<Pagos>> getPagosPorContratos(
+                @Header("Authorization") String token,
+                @Path("id") int idContrato
         );
     }
 }

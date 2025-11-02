@@ -1,37 +1,65 @@
 package com.tec.inmobile.ui.login;
 
+import android.content.Context;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.tec.inmobile.databinding.ActivityLoginBinding;
 
-public class LoginActivity extends AppCompatActivity {
+public class LoginActivity extends AppCompatActivity implements SensorEventListener {
+
     private LoginActivityViewModel viewModel;
     private ActivityLoginBinding binding;
+    private SensorManager sensorManager;
+    private Sensor acelerometro;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding =ActivityLoginBinding.inflate(getLayoutInflater());
-        viewModel = ViewModelProvider.AndroidViewModelFactory.getInstance(getApplication()).create(LoginActivityViewModel.class);
+        binding = ActivityLoginBinding.inflate(getLayoutInflater());
+        viewModel = ViewModelProvider.AndroidViewModelFactory
+                .getInstance(getApplication())
+                .create(LoginActivityViewModel.class);
         setContentView(binding.getRoot());
-        binding.btLogin.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String user = binding.etUsuario.getText().toString();
-                String clave = binding.etClave.getText().toString();
-                viewModel.validarUsuario(user, clave);
-            }
-        });
-        viewModel.getError().observe(this, new Observer<String>() {
-            @Override
-            public void onChanged(String s) {
-                binding.tvError.setText(s);
-            }
-        });
+
+        sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+        acelerometro = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+
+        binding.btLogin.setOnClickListener(v ->
+                viewModel.validarUsuario(
+                        binding.etUsuario.getText().toString().trim(),
+                        binding.etClave.getText().toString().trim()
+                )
+        );
+
+        viewModel.getError().observe(this, binding.tvError::setText);
     }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        sensorManager.registerListener(this, acelerometro, SensorManager.SENSOR_DELAY_NORMAL);
+        viewModel.iniciarEscuchaSensor();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        sensorManager.unregisterListener(this);
+        viewModel.detenerEscuchaSensor();
+    }
+
+    @Override
+    public void onSensorChanged(SensorEvent event) {
+        viewModel.actualizarSensor(event.sensor.getType(), event.values, System.currentTimeMillis());
+    }
+
+    @Override
+    public void onAccuracyChanged(Sensor sensor, int accuracy) {}
 }
