@@ -42,6 +42,10 @@ public class PerfilViewModel extends AndroidViewModel {
             mEstado.setValue(true);
             mTexto.setValue("GUARDAR");
         }else{
+            if (nombre.isEmpty() || apellido.isEmpty() || dni.isEmpty() || telefono.isEmpty() || email.isEmpty()) {
+                Toast.makeText(getApplication(), "Todos los campos deben estar completos", Toast.LENGTH_LONG).show();
+                return;
+            }
             mEstado.setValue(false);
             mTexto.setValue("EDITAR");
             Propietario propietarioNew = new Propietario();

@@ -1,5 +1,6 @@
 package com.tec.inmobile.ui.contratos;
 
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.DefaultLifecycleObserver;
 import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.Observer;
@@ -39,6 +40,7 @@ public class DetalleContratoFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         mv = new ViewModelProvider(this).get(DetalleContratoViewModel.class);
         binding = FragmentDetalleContratoBinding.inflate(inflater, container, false);
+        ((AppCompatActivity) requireActivity()).getSupportActionBar().setTitle("Detalle del Contrato");
         View view = binding.getRoot();
         mv.getMContrato().observe(getViewLifecycleOwner(), new Observer<Contrato>() {
             @Override

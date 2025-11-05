@@ -32,11 +32,17 @@ public class MainActivity extends AppCompatActivity {
 
         setSupportActionBar(binding.appBarMain.toolbar);
 
-        binding.appBarMain.btAgregar.setOnClickListener(v ->
-                Snackbar.make(v, "Agregar inmueble", Snackbar.LENGTH_LONG)
-                        .setAnchorView(R.id.btAgregar)
-                        .show()
-        );
+        binding.appBarMain.btAgregar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Navigation.findNavController(MainActivity.this, R.id.nav_host_fragment_content_main)
+                        .navigate(R.id.crearFragment, null,
+                                new androidx.navigation.NavOptions.Builder()
+                                        .setLaunchSingleTop(true)
+                                        .setPopUpTo(R.id.nav_inmuebles, false)
+                                        .build());
+            }
+        });
 
         DrawerLayout drawer = binding.drawerLayout;
         NavigationView navigationView = binding.navView;

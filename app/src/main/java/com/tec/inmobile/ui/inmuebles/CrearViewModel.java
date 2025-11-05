@@ -65,12 +65,38 @@ public class CrearViewModel extends AndroidViewModel {
     }
 
     public void guardarInmueble(String ambientes, String superficie, String direccion, String uso, String tipo, String latitud, String longitud, String valor) {
+        if (direccion.isEmpty() || uso.isEmpty() || tipo.isEmpty() ||
+                ambientes.isEmpty() || superficie.isEmpty() ||
+                latitud.isEmpty() || longitud.isEmpty() || valor.isEmpty()) {
+            Toast.makeText(getApplication(), "Debe llenar todos los campos", Toast.LENGTH_LONG).show();
+            return;
+        }
         try {
             int amb = Integer.parseInt(ambientes);
             int superf = Integer.parseInt(superficie);
             double val = Double.parseDouble(valor);
             double lat = Double.parseDouble(latitud);
             double lon = Double.parseDouble(longitud);
+            if (amb <= 0 ) {
+                Toast.makeText(getApplication(), "Ambientes debe ser un numero mayor que 0", Toast.LENGTH_LONG).show();
+                return;
+            }
+            if (superf <= 0) {
+                Toast.makeText(getApplication(), "Superficie debe ser un numero mayor que 0", Toast.LENGTH_LONG).show();
+                return;
+            }
+            if (val <= 0) {
+                Toast.makeText(getApplication(), "El Precio debe ser un numero mayor que 0", Toast.LENGTH_LONG).show();
+                return;
+            }
+            if (lat <= 0) {
+                Toast.makeText(getApplication(), "Latitud debe ser un numero mayor que 0", Toast.LENGTH_LONG).show();
+                return;
+            }
+            if (lon <=0){
+                Toast.makeText(getApplication(), "Longitud debe ser un numero mayor que 0", Toast.LENGTH_LONG).show();
+                return;
+            }
             Inmueble inmueble = new Inmueble();
             inmueble.setDireccion(direccion);
             inmueble.setUso(uso);

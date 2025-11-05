@@ -1,5 +1,6 @@
 package com.tec.inmobile.ui.contratos;
 
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.os.Bundle;
@@ -27,6 +28,7 @@ public class PagosFragment extends Fragment {
 
         vm = new ViewModelProvider(this).get(PagosViewModel.class);
         binding = FragmentPagosBinding.inflate(inflater, container, false);
+        ((AppCompatActivity) requireActivity()).getSupportActionBar().setTitle("Lista de Pagos");
         View root = binding.getRoot();
 
         vm.getMPagos().observe(getViewLifecycleOwner(), pagos -> {

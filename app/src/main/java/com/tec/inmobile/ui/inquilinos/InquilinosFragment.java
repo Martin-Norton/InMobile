@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
@@ -24,6 +25,7 @@ public class InquilinosFragment extends Fragment {
                              @Nullable Bundle savedInstanceState) {
         binding = FragmentInquilinosBinding.inflate(inflater, container, false);
         vm = new ViewModelProvider(this).get(InquilinosViewModel.class);
+        ((AppCompatActivity) requireActivity()).getSupportActionBar().setTitle("Detalles del Inquilino");
 
         Inquilino inquilino = (Inquilino) getArguments().getSerializable("inquilino");
 

@@ -1,5 +1,6 @@
 package com.tec.inmobile.ui.inmuebles;
 
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -34,6 +35,7 @@ public class DetalleInmueble extends Fragment {
         inmueble = new Inmueble();
         mv = new ViewModelProvider(this).get(DetalleInmuebleViewModel.class);
         binding = FragmentDetalleInmuebleBinding.inflate(inflater, container, false);
+        ((AppCompatActivity) requireActivity()).getSupportActionBar().setTitle("Detalle del Inmueble");
         View view = binding.getRoot();
         mv.getMInmueble().observe(getViewLifecycleOwner(), new Observer<Inmueble>() {
             @Override
