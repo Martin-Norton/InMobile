@@ -31,17 +31,12 @@ public class PagosViewModel extends AndroidViewModel {
         return mPagos;
     }
 
-    public void recuperarPagos(Bundle bundle) {
-        if (bundle != null && bundle.containsKey("contratoBundle")) {
-            Contrato contrato = (Contrato) bundle.getSerializable("contratoBundle");
-            if (contrato != null) {
-                Log.d("PagosVM", "Recibido contrato con ID: " + contrato.getIdContrato());
-                obtenerPagosPorContrato(contrato);
-            } else {
-                Log.e("PagosVM", "Contrato es null dentro del bundle");
-            }
+    public void recuperarPagos(Contrato contrato) {
+        if (contrato != null) {
+            Log.d("PagosVM", "Recibido contrato con ID: " + contrato.getIdContrato());
+            obtenerPagosPorContrato(contrato);
         } else {
-            Log.e("PagosVM", "No se encontró el contrato en el bundle");
+            Log.e("PagosVM", "Contrato es null dentro del bundle");
         }
     }
 

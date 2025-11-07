@@ -27,7 +27,7 @@ public class InquilinosFragment extends Fragment {
         vm = new ViewModelProvider(this).get(InquilinosViewModel.class);
         ((AppCompatActivity) requireActivity()).getSupportActionBar().setTitle("Detalles del Inquilino");
 
-        Inquilino inquilino = (Inquilino) getArguments().getSerializable("inquilino");
+        Inquilino inquilino = (Inquilino) getArguments().getSerializable("inquilinoBundle");
 
         vm.traerInquilino(inquilino);
         vm.getMInquilino().observe(getViewLifecycleOwner(), new Observer<Inquilino>() {

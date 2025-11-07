@@ -20,6 +20,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.bumptech.glide.Glide;
 import com.tec.inmobile.databinding.FragmentCrearBinding;
 
 public class CrearFragment extends Fragment {
@@ -57,7 +58,12 @@ public class CrearFragment extends Fragment {
         mv.getUriMutableLiveData().observe(getViewLifecycleOwner(), new Observer<Uri>() {
             @Override
             public void onChanged(Uri uri) {
-                binding.imageView2.setImageURI(uri);
+                //binding.imageView2.setImageURI(uri);
+                Glide.with(requireContext())
+                        .load(uri)
+                        .override(800, 800)
+                        .centerCrop()
+                        .into(binding.imageView2);
             }
         });
 

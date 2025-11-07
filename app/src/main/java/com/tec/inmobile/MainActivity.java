@@ -51,7 +51,6 @@ public class MainActivity extends AppCompatActivity {
                 R.id.nav_inicio,
                 R.id.nav_perfil,
                 R.id.nav_inmuebles,
-                R.id.nav_inquilinos,
                 R.id.nav_contratos,
                 R.id.nav_logout
         )
@@ -67,7 +66,6 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
 
-        // Mostrar datos del propietario en el header del Navigation Drawer
         View headerView = navigationView.getHeaderView(0);
         TextView tvNombre = headerView.findViewById(R.id.tvNombrePropietario);
         TextView tvEmail = headerView.findViewById(R.id.tvEmailPropietario);

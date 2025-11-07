@@ -30,13 +30,9 @@ import retrofit2.Response;
 public class ContratosViewModel extends AndroidViewModel {
 
     private MutableLiveData<List<Inmueble>> listaInmueblesContratos= new MutableLiveData<>();
-    private List<Contrato> listaContratos;
-    private List<Inmueble> inmueblesConContrato;
 
     public ContratosViewModel(@NonNull Application application) {
         super(application);
-        listaContratos = new ArrayList<>();
-        inmueblesConContrato = new ArrayList<>();
     }
     public LiveData <List<Inmueble>> getListaInmueblesContratos(){
         return listaInmueblesContratos;
@@ -45,27 +41,19 @@ public class ContratosViewModel extends AndroidViewModel {
     public void obtenerListaInmueblesContratos(){
         String token= ApiClient.leerToken(getApplication());
         ApiClient.InmoService api = ApiClient.getInmoService();
-        Call<List<Contrato>> call = api.getContratos("Bearer " + token);
-        call.enqueue(new Callback<List<Contrato>>() {
+        Call<List<Inmueble>> call = api.getContratoVigente("Bearer " + token);
+        call.enqueue(new Callback<List<Inmueble>>() {
             @Override
-            public void onResponse(Call<List<Contrato>> call, Response<List<Contrato>> response) {
+            public void onResponse(Call<List<Inmueble>> call, Response<List<Inmueble>> response) {
                 if (response.isSuccessful()){
-                    listaContratos.clear();
-                    inmueblesConContrato.clear();
-                    listaContratos.addAll(response.body());
-                    for (Contrato c: listaContratos) {
-                       inmueblesConContrato.add(c.getInmueble());
-                    }
-                    listaInmueblesContratos.postValue(inmueblesConContrato);
-                    Toast.makeText(getApplication(), "Cantidad de inmuebles con contratos: " + inmueblesConContrato.size(), Toast.LENGTH_LONG).show();
-
+                    listaInmueblesContratos.postValue(response.body());
                 }else{
                     Toast.makeText(getApplication(), "Error al obtener Contratos en onResponse", Toast.LENGTH_LONG).show();
                 }
             }
 
             @Override
-            public void onFailure(Call<List<Contrato>> call, Throwable t) {
+            public void onFailure(Call<List<Inmueble>> call, Throwable t) {
                 Toast.makeText(getApplication(), "Error en la respuesta en onFailure" + t.getMessage(), Toast.LENGTH_LONG).show();
             }
         });

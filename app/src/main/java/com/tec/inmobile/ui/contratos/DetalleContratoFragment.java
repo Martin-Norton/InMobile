@@ -23,14 +23,19 @@ import android.view.ViewGroup;
 import com.tec.inmobile.R;
 import com.tec.inmobile.databinding.FragmentDetalleContratoBinding;
 import com.tec.inmobile.models.Contrato;
+import com.tec.inmobile.models.Inquilino;
+import com.tec.inmobile.models.Pagos;
 import com.tec.inmobile.ui.inquilinos.InquilinosFragment;
 
 import java.text.SimpleDateFormat;
+import java.util.List;
 import java.util.Locale;
 
 public class DetalleContratoFragment extends Fragment {
     private FragmentDetalleContratoBinding binding;
     private DetalleContratoViewModel mv;
+    private Inquilino inquilino;
+    private Contrato contratoP;
 
     public static DetalleContratoFragment newInstance() {
         return new DetalleContratoFragment();
@@ -45,6 +50,8 @@ public class DetalleContratoFragment extends Fragment {
         mv.getMContrato().observe(getViewLifecycleOwner(), new Observer<Contrato>() {
             @Override
             public void onChanged(Contrato contrato) {
+                inquilino = contrato.getInquilino();
+                contratoP = contrato;
                 SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
                 binding.etCodigo.setText(String.valueOf(contrato.getIdContrato()));
                 binding.etFechaInicio.setText((contrato.getFechaInicio() != null ? dateFormat.format(contrato.getFechaInicio()) : "-"));
@@ -55,31 +62,23 @@ public class DetalleContratoFragment extends Fragment {
             }
         });
 
-        binding.btPagos.setOnClickListener(v -> {
-            Contrato contrato = mv.getMContrato().getValue();
-            if (contrato != null) {
-                mv.irApagos(Navigation.findNavController(v), contrato);
-            } else {
-                Log.e("DetalleContratoFragment", "Contrato es null, no se puede ir a pagos");
+        binding.btPagos.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("contratoBundle", contratoP);
+                NavController navController = NavHostFragment.findNavController(DetalleContratoFragment.this);
+                navController.navigate(R.id.pagosFragment, bundle);
             }
         });
         binding.btInquilinos.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mv.irAinquilinos();
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("inquilinoBundle", inquilino);
+                NavController navController = NavHostFragment.findNavController(DetalleContratoFragment.this);
+                navController.navigate(R.id.nav_inquilinos, bundle);
             }
-        });
-        mv.getIrAInquilino().observe(getViewLifecycleOwner(), bundle -> {
-            getViewLifecycleOwner().getLifecycle().addObserver(new DefaultLifecycleObserver() {
-                @Override
-                public void onResume(@NonNull LifecycleOwner owner) {
-                    if (bundle == null) return;
-                    NavController navController = NavHostFragment.findNavController(DetalleContratoFragment.this);
-                    navController.navigate(R.id.nav_inquilinos, bundle);
-                    mv.limpiarNavegacion();
-                    getViewLifecycleOwner().getLifecycle().removeObserver(this);
-                }
-            });
         });
         mv.recuperarContrato(getArguments());
         return view;

@@ -1,6 +1,7 @@
 package com.tec.inmobile.ui.contratos;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.os.Bundle;
@@ -16,6 +17,11 @@ import android.view.ViewGroup;
 
 import com.tec.inmobile.R;
 import com.tec.inmobile.databinding.FragmentPagosBinding;
+import com.tec.inmobile.models.Contrato;
+import com.tec.inmobile.models.Inquilino;
+import com.tec.inmobile.models.Pagos;
+
+import java.util.List;
 
 public class PagosFragment extends Fragment {
 
@@ -31,18 +37,18 @@ public class PagosFragment extends Fragment {
         ((AppCompatActivity) requireActivity()).getSupportActionBar().setTitle("Lista de Pagos");
         View root = binding.getRoot();
 
-        vm.getMPagos().observe(getViewLifecycleOwner(), pagos -> {
-            PagosAdapter adapter = new PagosAdapter(getContext(), pagos);
-            LinearLayoutManager layout = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
-            binding.listaPagos.setLayoutManager(layout);
-            binding.listaPagos.setAdapter(adapter);
+        vm.getMPagos().observe(getViewLifecycleOwner(), new Observer<List<Pagos>>() {
+            @Override
+            public void onChanged(List<Pagos> pagos) {
+                PagosAdapter adapter = new PagosAdapter(getContext(), pagos);
+                LinearLayoutManager layout = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
+                binding.listaPagos.setLayoutManager(layout);
+                binding.listaPagos.setAdapter(adapter);
+            }
         });
 
-        Bundle bundle = getArguments();
-        if (bundle != null) {
-            vm.recuperarPagos(bundle);
-        }
-
+        Contrato contrato = (Contrato) getArguments().getSerializable("contratoBundle");
+        vm.recuperarPagos(contrato);
         return root;
     }
 }
